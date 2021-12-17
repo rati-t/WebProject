@@ -9,3 +9,6 @@
     cursor: default;
 }
 
+.otherPlayers {
+    cursor: pointer;
+}

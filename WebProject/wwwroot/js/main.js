@@ -1,5 +1,12 @@
 ﻿const getFlagEmoji = countryCode => String.fromCodePoint(...[...countryCode.toUpperCase()].map(x => 0x1f1a5 + x.charCodeAt()))
 const DefaultProfileUrl = "https://www.chess.com/bundles/web/images/user-image.007dad08.svg";
+const tableHeaderDiv =`<div class="container my-4 row bg-success border mx-auto border-white rounded-bottom rounded-top text-dark">
+                            <div class="col mx-auto text-center h2">Type</div>
+                            <div class="col mx-auto text-center h2">Players</div>
+                            <div class="col mx-auto text-center h2">GameLink</div>
+                            <div class="col mx-auto text-center h2">Date</div>
+                       </div >`
+var currentPlayer;
 var searchButton;
 var searchInput;
 var searchSpinner;
@@ -15,40 +22,46 @@ $(document).ready(function () {
     mainWrapper = $("#profileWrapper");
 
     searchButton.click(function () {
-        searchButton.addClass("disabled");
-        mainWrapper.addClass("d-none");
-        $("#failWrapper").addClass("d-none");
-        $("#gamesWrapper").addClass("d-none")
-
-        searchSpinner.removeClass("d-none")
-        
-        var id = searchInput[0].value;
-
-        $.ajaxSetup({ async: false });
-
-        var OptionString = ApiOptions["playerInfo"];
-
-        $.get('/Home/Get', { option: OptionString, args: JSON.stringify([id]) }, function (data) {
-            if (data == -1) {
-
-                searchSpinner.addClass("d-none");
-                searchButton.removeClass("disabled")
-
-                $("#failWrapper").removeClass("d-none");
-            } else {
-                searchButton.removeClass("disabled")
-                mainWrapper.removeClass("d-none");
-
-                searchSpinner.addClass("d-none");
-
-                updateProfileData(data);
-                console.log(new Date())
-                receiveMonthlyArchieves(id, new Date().getUTCFullYear(), new Date().getUTCMonth() + 1,);
-            }
-        })
-            
+        initiateSearch(searchInput[0].value)
     });
+
 });
+
+function initiateSearch(nickname) {
+
+    searchInput[0].value = nickname;
+    currentPlayer = "";
+
+    searchButton.addClass("disabled");
+    mainWrapper.addClass("d-none");
+    $("#failWrapper").addClass("d-none");
+    $("#gamesWrapper").addClass("d-none")
+
+    searchSpinner.removeClass("d-none")
+
+    var id = nickname;
+
+    $.ajaxSetup({ async: false });
+
+    var OptionString = ApiOptions["playerInfo"];
+
+    $.get('/Home/Get', { option: OptionString, args: JSON.stringify([id]) }, function (data) {
+        if (data == -1) {
+
+            searchSpinner.addClass("d-none");
+            searchButton.removeClass("disabled")
+
+            $("#failWrapper").removeClass("d-none");
+        } else {
+
+            currentPlayer = data.username;
+
+            updateProfileData(data);
+
+            receiveMonthlyArchieves(id, new Date().getUTCFullYear(), new Date().getUTCMonth() + 1,);
+        }
+    })
+}
 
 function updateProfileData(data) {
     
@@ -82,8 +95,16 @@ function receiveMonthlyArchieves(id, currentYear, currentMonth) {
             $("#gamesWrapper").removeClass("d-none")
             $("#gamesWrapper").append(h1);
         } else {
+            searchButton.removeClass("disabled")
+            mainWrapper.removeClass("d-none");
             $("#gamesWrapper").removeClass("d-none");
-            for (var index = 0; index < data.games.length; index++) {
+
+            searchSpinner.addClass("d-none");
+
+            $("#gamesWrapper")[0].innerHTML = tableHeaderDiv;
+
+            for (var index = data.games.length - 1; index >= 0; index--) {
+
                 var game = data.games[index];
                 var mainDiv = document.createElement("div");
 
@@ -94,8 +115,16 @@ function receiveMonthlyArchieves(id, currentYear, currentMonth) {
                
                 $(matchDiv).append(matchLink);
 
-                whiteUsername.innerHTML = game.white.username + " (" + game.white.rating + ") " + EndingTypes[game.white.result];
-                blackUsername.innerHTML = game.black.username + " (" + game.black.rating + ") " + EndingTypes[game.black.result];
+                
+                if (game.black.username != currentPlayer) {
+                    whiteUsername.innerHTML = game.white.username + " (" + game.white.rating + ") " + EndingTypes[game.white.result];
+                    blackUsername.innerHTML = "<h5 class='d-inline otherPlayers' onclick='initiateSearch(this.innerText)'>" + game.black.username + "</h5>" + " (" + game.black.rating + ") " + EndingTypes[game.black.result];
+                }
+                if (game.white.username != currentPlayer) {
+                    whiteUsername.innerHTML = "<h5 class='d-inline otherPlayers' onclick='initiateSearch(this.innerText)'>" + game.white.username + "</h5>" + " (" + game.white.rating + ") " + EndingTypes[game.white.result];
+                    blackUsername.innerHTML = game.black.username + " (" + game.black.rating + ") " + EndingTypes[game.black.result];
+                }
+
                 $(usernameDiv).append(whiteUsername, blackUsername)
 
                 var gameTypeDiv = document.createElement("div");
