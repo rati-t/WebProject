@@ -1,8 +1,77 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search for players</title>
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./lib/bootstrap/css/bootstrap.css">
+</head>
+<body class="bg-dark">
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+    <div class="container mx-auto bg-dark row m-0 d-flex justify-content-center">
+        <label for="searchPlayer" class="h2 text-white col-12 mx-0 mx-auto text-center">Player</label>
+        <div class="col-12 mx-auto">
+            <input type="text" class="form-control col-4 mx-auto" id="searchPlayer">
+        </div>
+        <button type="button" class="btn btn-success col-2 my-3 mx-auto" id="searchPlayerButton">Search</button>
+    </div>
+    <div class="spinner-border text-success d-none position-absolute" id="searchSpinner"></div>
+
+    <div class="container-fluid bg-dark m-0 d-none row" id="failWrapper">
+        <h1 class="d-block mx-auto text-center text-warning">Player does not exit</h1>
+    </div>
+
+    <div class="container-fluid bg-dark m-0 d-none row" id="profileWrapper">
+
+        <div class="container-fluid m-4">
+            <img src="" class="img-fluid d-block mx-auto rounded-bottom rounded-top" alt="Profile picture" id="profilePicture" width="200px" height="200px">
+        </div>
+
+        <div class="container mx-auto row col-8" id="StatusWrapper">
+            <div class="container-fluid col">
+                <h1 class="text-white h3 text-center" id="nickname" data-toggle="tooltip" data-placement="top" data-original-title="Nickname"></h1>
+            </div>
+            <div class="container-fluid col">
+                <h1 class="h1 text-center" id="countryFlag" data-toggle="tooltip" data-placement="top" data-original-title="Country"></h1>
+            </div>
+            <div class="container-fluid col">
+                <h1 class="text-white h3 text-center" id="realName" data-toggle="tooltip" data-placement="top" data-original-title="Real name"></h1>
+            </div>
+        </div>
+
+        <div class="container mx-auto row col-8" id="toolpitWrapperDiv">
+            <div class="container-fluid col">
+                <h1 title="" class="text-white text-center h1" id="onlineStatusSpan" data-toggle="tooltip" data-placement="top" data-original-title="Last Online">⚓</h1>
+                <h1 class="text-white text-center h4" id="onlineStatus"></h1>
+            </div>
+
+            <div class="container-fluid col">
+                <h1 title="" class="text-white text-center h1" id="joinedSpan" data-toggle="tooltip" data-placement="top" data-original-title="Joined">♖</h1>
+                <h1 class="text-white text-center h4" id="joined"></h1>
+            </div>
+
+            <div class="container-fluid col">
+                <h1 title="" class="text-white text-center h1" id="followersSpan" data-toggle="tooltip" data-placement="top" data-original-title="Followers">👤</h1>
+                <h1 class="text-white text-center h4" id="followers"></h1>
+            </div>
+        </div>
+        <div class="container-fluid d-none bg-dark" id="gamesWrapper">
+            <div class="container my-4 row bg-success border mx-auto border-white rounded-bottom rounded-top text-dark">
+                <div class="col mx-auto text-center h2">Type</div>
+                <div class="col mx-auto text-center h2">Players</div>
+                <div class="col mx-auto text-center h2">GameLink</div>
+                <div class="col mx-auto text-center h2">Date</div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="./js/Constants.js"></script>
+    <script src="./lib/jquery/dist/jquery.js"></script>
+    <script src="./lib/bootstrap//js/bootstrap.bundle.js"></script>>
+    <script src="./js/variousCountryListFormats.js"></script>
+    <script src="./js/main.js"></script>
+</body>
+</html>

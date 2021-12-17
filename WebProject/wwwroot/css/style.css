@@ -1,0 +1,11 @@
+﻿#searchSpinner {
+    top: 40vh;
+    left: 40vw;
+    width: 20vw;
+    height: 20vw;
+}
+
+#toolpitWrapperDiv div h1 {
+    cursor: default;
+}
+
