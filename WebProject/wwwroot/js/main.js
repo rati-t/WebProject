@@ -3,7 +3,7 @@ const DefaultProfileUrl = "https://www.chess.com/bundles/web/images/user-image.0
 const tableHeaderDiv =`<div class="container my-4 row bg-success border mx-auto border-white rounded-bottom rounded-top text-dark">
                             <div class="col mx-auto text-center h2">Type</div>
                             <div class="col mx-auto text-center h2">Players</div>
-                            <div class="col mx-auto text-center h2">GameLink</div>
+                            <div class="col mx-auto text-center h2">Game</div>
                             <div class="col mx-auto text-center h2">Date</div>
                        </div >`
 var currentPlayer;
