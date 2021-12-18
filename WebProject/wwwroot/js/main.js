@@ -54,7 +54,7 @@ function initiateSearch(nickname) {
             $("#failWrapper").removeClass("d-none");
         } else {
 
-            currentPlayer = data.username;
+            currentPlayer = nickname;
 
             updateProfileData(data);
 
@@ -77,8 +77,8 @@ function updateProfileData(data) {
     } else {
         $("#profilePicture").attr("src", DefaultProfileUrl);
     }
-    
-    $("#nickname").text(data.username);
+
+    $("#nickname").text(currentPlayer);
     $("#realName").text(data.name);
     $("#countryFlag").text(getFlagEmoji(iso));
     $("#countryFlag").attr("data-original-title", countryListAlpha2[iso]);
@@ -115,7 +115,6 @@ function receiveMonthlyArchieves(id, currentYear, currentMonth) {
                
                 $(matchDiv).append(matchLink);
 
-                
                 if (game.black.username != currentPlayer) {
                     whiteUsername.innerHTML = game.white.username + " (" + game.white.rating + ") " + EndingTypes[game.white.result];
                     blackUsername.innerHTML = "<h5 class='d-inline otherPlayers' onclick='initiateSearch(this.innerText)'>" + game.black.username + "</h5>" + " (" + game.black.rating + ") " + EndingTypes[game.black.result];
@@ -137,6 +136,8 @@ function receiveMonthlyArchieves(id, currentYear, currentMonth) {
                 matchLink.innerText = "Analyze";
                 $(matchDiv).attr("class", "container col m-auto text-center");
                 $(matchLink).attr("class", "text-decoration-none text-success h2")
+
+                $(matchDiv).append(matchLink);
 
                 var dateDiv = document.createElement("div");
                 var dateText = document.createElement("h1");
@@ -177,12 +178,13 @@ function timeConverter(UNIX_timestamp) {
 }
 
 function determineOnlineStatus(lastOnlineDate) {
+    var lastOnline = timeConverter(lastOnlineDate);
     var today = Math.round((new Date()).getTime() / 1000);
-    if (today - lastOnlineDate > 86400) {
-        return lastOnlineDate.date + " " + lastOnlineDate.month + " " + lastOnlineDate.year;
-    } else if (today - lastOnlineDate > 3600) {
+    if (today - lastOnlineDate >= 86400) {
+        return lastOnline.date + " " + lastOnline.month + " " + lastOnline.year;
+    } else if (today - lastOnlineDate >= 3600) {
         return parseInt((today - lastOnlineDate) / 3600) + " hour ago";
-    } else if (today - lastOnlineDate > 60) {
+    } else if (today - lastOnlineDate >= 60) {
         return parseInt((today - lastOnlineDate) / 60) + " minute ago";
     } else {
         return "Online Now"
